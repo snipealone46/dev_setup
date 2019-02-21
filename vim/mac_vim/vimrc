@@ -1,0 +1,63 @@
+" enable pathogen "
+set nocp
+call pathogen#infect()
+filetype plugin indent on
+set autoindent
+" color "
+let &t_Co = 256
+colorscheme molokai   " the colorscheme "
+syntax enable         " turn on color "
+" spaces "
+set expandtab       " spaces for tabs "
+
+function! Tab_Or_Complete()
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+:inoremap <Tab> <C-R>=Tab_Or_Complete()<CR>
+:set dictionary="/usr/dict/words"
+
+" fixes display issues with arrows in NERDTree "
+set encoding=utf-8
+" ui "
+set number relativenumber
+set showcmd            " keeps most recent command on bottom "
+set wildmenu           " command autocomplete "
+set showmatch          " matches bracket/braces/parens "
+set colorcolumn=101    " sets a red marker on col 101 so I know I'm in violation "
+set pastetoggle=<F2>   " toggle auto-indentation when pasting "
+set shell=bash\ -i     " set default shell to bash "
+set et sts=2 sw=2 ts=2 " default spacing is compact "
+filetype indent on     " filetype-specific indentation "
+set backspace=indent,eol,start "fix docker backspace issue"
+" search "
+set hlsearch        " highlight matches
+
+" filetype detection "
+augroup filetypedetect
+  au! BufRead,BufNewFile _vimrc,*.vim,vimrc     set filetype=vim
+    au! BufRead,BufNewFile *.erb                  set ts=2 | set sw=2 | set filetype=eruby
+    au! BufRead,BufNewFile *.mako                 set ts=2 | set sw=2 | set filetype=mako
+      au! BufRead,BufNewFile *.rb,*.builder,*.axlsx set ts=2 | set sw=2 | set filetype=ruby
+      au! BufRead,BufNewFile *.py,*.pip             set ts=4 | set sw=4 | set filetype=python
+        au! BufRead,BufNewFile *.rom,*.sql            set ts=4 | set sw=4 | set filetype=sql
+        au! BufRead,BufNewFile *.js,*.json,*.coffee   set ts=2 | set sw=2 | set filetype=javascript
+          au! BufRead,BufNewFile *.css,*.scss,*.less    set ts=2 | set sw=2 | set filetype=css
+          au! BufRead,BufNewFile *.yaml,*.yml           set ts=2 | set sw=2 | set filetype=yaml
+            au! BufRead,BufNewFile *.sh                   set ts=4 | set sw=4 | set filetype=sh
+            au! BufRead,BufNewFile *.ini,*.cfg,*.hgrc     set ts=2 | set sw=2 | set filetype=dosini
+              au! BufRead,BufNewFile *.txt,*.dat,*.csv      set filetype=csv | setlocal nowrap | setlocal ts=16
+              au! BufRead,BufNewFile *.html                 set ts=2 | set sw=2 | set filetype=mako
+                au! BufRead,BufNewFile *.xml                  set ts=2 | set sw=2 | set filetype=xml
+                au! BufRead,BufNewFile * if expand('%:t') ~ 'hgrc' | set ts=2 | set sw=2 | set filetype=dosini | endif
+                  au! BufRead,BufNewFile * if expand('%:t') !~ '\.' | set filetype=ruby | endif
+                augroup END
+
+                " remove trailing whitespace on save "
+                au BufWritePre * :%s/\s\+$//e
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+map <C-n> :NERDTreeToggle<CR>
