@@ -1,0 +1,39 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+alias dockerpurge='docker system prune -f'
+alias dockerrmall='docker rm $(docker ps -a -q)'
+alias dockerkillall='docker kill $(docker ps -a -q)'
+alias dockerpsa='docker ps -a'
+alias dockerkillandrm='docker kill $(docker ps -a -q) ; docker rm $(docker ps -a -q)'
+alias dockercleanup='docker volume rm $(docker volume ls -qf dangling=true);docker rmi $(docker image --quiet --filter "dangling=true")'
+export LDFLAGS="-L/usr/local/opt/zlib/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include"
+export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
+# Customize to your needs...
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+dfi() {
+  if [ $(docker ps | awk '{print $NF}' | grep -e ".*_.*$1.*" | wc -l) -eq "1" ]; then
+    docker exec -it $(docker ps | awk '{print $NF}' | grep -e ".*_.*$1.*") bash
+  elif [ $(docker ps | awk '{print $NF}' | grep -e ".*_.*$1.*" | wc -l) -eq "0" ]; then
+    echo " ** Cannot find any container with that name"
+  else
+    echo " ** Multiple conntainers are found with that name"
+    echo "################################"
+    echo "$(docker ps | awk '{print $NF}' | grep -e ".*_.*$1.*")"
+    echo "################################"
+    echo " ** Please use the unique key word in the name"
+  fi
+}
