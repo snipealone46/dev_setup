@@ -9,11 +9,17 @@ colorscheme molokai   " the colorscheme "
 syntax enable         " turn on color "
 " spaces "
 set expandtab       " spaces for tabs "
+" emmet-vim settings"
+let g:user_emmet_leader_key='<Tab>'
+let g:user_emmet_settings = {
+  \  'javascript.jsx' : {
+    \      'extends' : 'jsx',
+    \  },
+  \}
 
 function! Tab_Or_Complete()
   if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
-    return "\<C-N>"
-  else
+    return "\<C-N>" else
     return "\<Tab>"
   endif
 endfunction
@@ -39,25 +45,25 @@ set hlsearch        " highlight matches
 " filetype detection "
 augroup filetypedetect
   au! BufRead,BufNewFile _vimrc,*.vim,vimrc     set filetype=vim
-    au! BufRead,BufNewFile *.erb                  set ts=2 | set sw=2 | set filetype=eruby
-    au! BufRead,BufNewFile *.mako                 set ts=2 | set sw=2 | set filetype=mako
-      au! BufRead,BufNewFile *.rb,*.builder,*.axlsx set ts=2 | set sw=2 | set filetype=ruby
-      au! BufRead,BufNewFile *.py,*.pip             set ts=4 | set sw=4 | set filetype=python
-        au! BufRead,BufNewFile *.rom,*.sql            set ts=4 | set sw=4 | set filetype=sql
-        au! BufRead,BufNewFile *.js,*.json,*.coffee   set ts=2 | set sw=2 | set filetype=javascript
-          au! BufRead,BufNewFile *.css,*.scss,*.less    set ts=2 | set sw=2 | set filetype=css
-          au! BufRead,BufNewFile *.yaml,*.yml           set ts=2 | set sw=2 | set filetype=yaml
-            au! BufRead,BufNewFile *.sh                   set ts=4 | set sw=4 | set filetype=sh
-            au! BufRead,BufNewFile *.ini,*.cfg,*.hgrc     set ts=2 | set sw=2 | set filetype=dosini
-              au! BufRead,BufNewFile *.txt,*.dat,*.csv      set filetype=csv | setlocal nowrap | setlocal ts=16
-              au! BufRead,BufNewFile *.html                 set ts=2 | set sw=2 | set filetype=mako
-                au! BufRead,BufNewFile *.xml                  set ts=2 | set sw=2 | set filetype=xml
-                au! BufRead,BufNewFile * if expand('%:t') ~ 'hgrc' | set ts=2 | set sw=2 | set filetype=dosini | endif
-                  au! BufRead,BufNewFile * if expand('%:t') !~ '\.' | set filetype=ruby | endif
-                augroup END
+	au! BufRead,BufNewFile *.erb                  set ts=2 | set sw=2 | set filetype=eruby
+	au! BufRead,BufNewFile *.mako                 set ts=2 | set sw=2 | set filetype=mako
+	au! BufRead,BufNewFile *.rb,*.builder,*.axlsx set ts=2 | set sw=2 | set filetype=ruby
+	au! BufRead,BufNewFile *.py,*.pip             set ts=4 | set sw=4 | set filetype=python
+	au! BufRead,BufNewFile *.rom,*.sql            set ts=4 | set sw=4 | set filetype=sql
+	au! BufRead,BufNewFile *.js,*.json,*.coffee   set ts=2 | set sw=2 | set filetype=javascript
+	au! BufRead,BufNewFile *.css,*.scss,*.less    set ts=2 | set sw=2 | set filetype=css
+	au! BufRead,BufNewFile *.yaml,*.yml           set ts=2 | set sw=2 | set filetype=yaml
+	au! BufRead,BufNewFile *.sh                   set ts=4 | set sw=4 | set filetype=sh
+	au! BufRead,BufNewFile *.ini,*.cfg,*.hgrc     set ts=2 | set sw=2 | set filetype=dosini
+	au! BufRead,BufNewFile *.txt,*.dat,*.csv      set filetype=csv | setlocal nowrap | setlocal ts=16
+	au! BufRead,BufNewFile *.html                 set ts=2 | set sw=2 | set filetype=mako
+	au! BufRead,BufNewFile *.xml                  set ts=2 | set sw=2 | set filetype=xml
+	au! BufRead,BufNewFile * if expand('%:t') ~ 'hgrc' | set ts=2 | set sw=2 | set filetype=dosini | endif
+		au! BufRead,BufNewFile * if expand('%:t') !~ '\.' | set filetype=ruby | endif
+	augroup END
 
-                " remove trailing whitespace on save "
-                au BufWritePre * :%s/\s\+$//e
+	" remove trailing whitespace on save "
+	au BufWritePre * :%s/\s\+$//e
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 map <C-n> :NERDTreeToggle<CR>
