@@ -1,0 +1,110 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+# Golang
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
+alias de='docker exec -it'
+alias prodbuild='ssh "CORP\shyang"@AZUVPBLDTRCM001.corp.firstam.com'
+alias nonprodbuild='ssh "CORP\shyang"@azuvnbldtrcm001.corp.firstam.com'
+alias acrlogin='az acr login -n trstans1trcmcr1'
+alias acrloginprod='az acr login -n trstaps1trcmcr1'
+alias dpserver='ssh "CORP\shyang"@sna9svasdep1.trust.firstam.com'
+alias dpserver-a='ssh "CORP\shyang-a"@sna9svasdep1.trust.firstam.com'
+alias ddpserver='ssh shyang-a@dfw2svasdep1.trust.firstam.com'
+alias ddpserver-a='ssh "CORP\shyang-a"@dfw2svasdep1.trust.firstam.com'
+alias pi='ssh pi@192.168.86.49'
+alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --ignore-urlfetcher-cert-requests &> /dev/null'
+alias dc='docker-compose'
+alias home='cd /Users/ericy/Documents/gitlab_cloud'
+alias dimage='docker images | grep'
+alias dimages='docker images'
+alias dp='docker system prune -f && docker volume prune -f'
+alias dr='docker rm $(docker ps -a -q)'
+alias dk='docker kill $(docker ps -a -q)'
+alias dpsa='docker ps -a'
+alias dc='docker-compose'
+alias dkrm='docker kill $(docker ps -a -q) ; docker rm $(docker ps -a -q)'
+alias drmiall='docker rmi -f $(docker images -a -q)'
+alias dclean='docker volume rm $(docker volume ls -qf dangling=true);docker rmi $(docker image --quiet --filter "dangling=true")'
+alias ff='vim $(fzf)'
+
+# kubectl alias
+alias kla='kubectl apply -f'
+alias klrm='kubectl delete -f'
+alias kpods='kubectl get pods -o wide'
+alias kpodss='kubectl get pods -o wide --insecure-skip-tls-verify'
+alias knodes='kubectl get nodes -o wide'
+alias klgc='kubectl config get-contexts'
+alias klgcf='kubectl config get-contexts | grep'
+alias kluc='kubectl config use-context'
+alias ke='kubectl exec -it'
+alias ksvc='kubectl get svc'
+alias ksvca='kubectl get svc -o wide'
+alias klogs='kubectl logs -f'
+alias kdpod='kubectl describe pod'
+alias kdsvc='kubectl describe svc'
+alias kl='kubectl'
+alias sftpprod='ssh shyang@sna9svasftp1.trust.firstam.com'
+
+export LDFLAGS="-L/usr/local/opt/zlib/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include"
+export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
+# Customize to your needs...
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+export GITLAB_ACCESS_TOKEN="glpat-pLk1PujmGyvzHsXsgaDb"
+dfi() {
+  if [ $(docker ps | awk '{print $NF}' | grep -e ".*-.*$1.*" | wc -l) -eq "1" ]; then
+    docker exec -it $(docker ps | awk '{print $NF}' | grep -e ".*-.*$1.*") bash
+  elif [ $(docker ps | awk '{print $NF}' | grep -e ".*-.*$1.*" | wc -l) -eq "0" ]; then
+    echo " ** Cannot find any container with that name"
+  else
+    echo " ** Multiple conntainers are found with that name"
+    echo "################################"
+    echo "$(docker ps | awk '{print $NF}' | grep -e ".*-.*$1.*")"
+    echo "################################"
+    echo " ** Please use the unique key word in the name"
+  fi
+}
+dpscp() {
+  scp "CORP\shyang"@sna9svasdep1.trust.firstam.com:~/$1 .
+}
+eval "$(pyenv init -)"
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+
+dnsloop() {
+  while
+  do
+    nslookup $1
+    sleep 3
+  done
+}
+
+convert_der() {
+  openssl x509 -in $1 -inform der -out $2
+}
+
+kpodsloop() {
+  while
+  do
+    kpods $1
+    sleep 3
+  done
+}
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/terraform terraform
